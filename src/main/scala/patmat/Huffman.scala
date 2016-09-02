@@ -270,7 +270,7 @@ object Huffman {
   def convert(tree: CodeTree): CodeTable = {
 
     def convertAcc(treeAcc: CodeTree, path: List[Bit], acc: CodeTable): CodeTable = treeAcc match {
-      case Leaf(char, weight) => (char, path) :: acc
+      case Leaf(char, weight) => (char, path.reverse) :: acc
       case Fork(left, right, chars, weight) => mergeCodeTables(convertAcc(left, 0 :: path, acc), convertAcc(right, 1 :: path, acc))
     }
 
@@ -300,7 +300,7 @@ object Huffman {
       if (text.isEmpty)
         acc
       else
-        quickEncodeAcc(table)(text.tail, List.concat(acc, codeBits(table)(text.head)));
+        quickEncodeAcc(table)(text.tail, List.concat(acc,codeBits(table)(text.head)));
     }
 
     quickEncodeAcc(convert(tree))(text, List())
